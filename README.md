@@ -42,17 +42,18 @@ The project serves as a real-time monitoring and diagnostic tool for the Meshtas
 Samples of currently running instances:
 
 - https://meshview.bayme.sh (SF Bay Area)
-- https://www.svme.sh/ (Sacramento Valley)
-- https://meshview.nyme.sh/   (New York)
-- https://meshview.socalmesh.org/ (LA Area)
-- https://map.wpamesh.net/ (Western Pennsylvania)
-- https://meshview.chicagolandmesh.org/ (Chicago)
+- https://www.svme.sh (Sacramento Valley)
+- https://meshview.nyme.sh   (New York)
+- https://meshview.socalmesh.org (LA Area)
+- https://map.wpamesh.net (Western Pennsylvania)
+- https://meshview.chicagolandmesh.org (Chicago)
 - https://meshview.mt.gt (Canadaverse)
 - https://meshview.meshtastic.es (Spain)
-- https://view.mtnme.sh/ (North Georgia / East Tennessee)
+- https://view.mtnme.sh (North Georgia / East Tennessee)
 - https://meshview.lsinfra.de (Hessen - Germany)
-- https://map.nswmesh.au/ (Sydney - Australia)
-- https://meshview.pvmesh.org/ (Pioneer Valley, Massachusetts)
+- https://map.nswmesh.au (Sydney - Australia)
+- https://meshview.pvmesh.org (Pioneer Valley, Massachusetts)
+- https://meshview.louisianamesh.org (Louisiana)
 ---
 
 ## Installing
@@ -62,31 +63,30 @@ Requires **`python3.11`** or above.
 Clone the repo from GitHub:
 
 ```bash
-git clone --recurse-submodules https://github.com/pablorevilla-meshtastic/meshview.git
+git clone https://github.com/pablorevilla-meshtastic/meshview.git
 ```
 
 ```bash
 cd meshview
-git submodule update --init
-ln -s ../python/meshtastic/protobuf meshtastic/protobuf
 ```
 Create a Python virtual environment:
 
 from the meshview directory...
 ```bash
-python3 -m venv env
+uv venv env || python3 -m venv env
 ```
 
 Install the environment requirements:
 
 ```bash
-./env/bin/pip install -r requirements.txt
+uv pip install -r requirements.txt || ./env/bin/pip install -r requirements.txt
 ```
 
-Install `graphviz`:
+Install `graphviz` on MacOS or Debian/Ubuntu Linux:
 
 ```bash
-sudo apt-get install graphviz
+[ "$(uname)" = "Darwin" ] && brew install graphviz
+[ "$(uname)" = "Linux" ] && sudo apt-get install graphviz
 ```
 
 Copy `sample.config.ini` to `config.ini`:
@@ -155,6 +155,7 @@ map = True
 top = True
 
 # Map boundaries (used for the map view).
+# Defaults will show the San Francisco Bay Area
 map_top_left_lat = 39
 map_top_left_lon = -123
 map_bottom_right_lat = 36
@@ -163,7 +164,7 @@ map_bottom_right_lon = -121
 # Updates intervals in seconds, zero or negative number means no updates
 # defaults will be 3 seconds
 map_interval=3
-firehose_interal=3
+firehose_interval=3
 
 # Weekly net details
 weekly_net_message = Weekly Mesh check-in. We will keep it open on every Wednesday from 5:00pm for checkins. The message format should be (LONG NAME) - (CITY YOU ARE IN) #BayMeshNet.
@@ -214,7 +215,7 @@ vacuum = False
 
 ## Running Meshview
 
-Start the database:
+Start the database manager:
 
 ```bash
 ./env/bin/python startdb.py
